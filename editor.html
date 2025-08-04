@@ -2,14 +2,65 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>회차 추가</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script defer src="js/editor.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>회차 작성</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>회차 추가</h1>
-  <input type="text" id="new-title" placeholder="제목"><br><br>
-  <textarea id="new-content" rows="10" cols="50" placeholder="본문 내용"></textarea><br><br>
-  <button onclick="addChapter()">저장</button>
+  <header>
+    <button class="back-button" onclick="location.href='index.html'">← 홈으로</button>
+    <h1>새 회차 작성</h1>
+  </header>
+
+  <!-- 회차 추가 폼 -->
+  <section id="editor">
+    <form id="chapter-form">
+      <input type="text" id="new-title" placeholder="회차 제목" required>
+      <textarea id="new-content" placeholder="회차 내용" required></textarea>
+      <button type="submit">저장</button>
+    </form>
+    <p style="font-size:0.85rem;color:#666;margin-top:1rem;">
+      ※ GitHub Pages는 서버가 없기 때문에 <strong>로컬 저장</strong> 후 JSON을 직접 커밋해야 합니다.<br>
+      추후 GitHub API 자동 커밋으로 확장하세요.
+    </p>
+  </section>
+
+  <script>
+    // 대상 novel JSON 파일 (수정)
+    const NOVEL_JSON = './data/novels/novel1.json';
+
+    let novel = {};
+
+    // 로드
+    async function loadNovel() {
+      const res = await fetch(NOVEL_JSON + '?t=' + Date.now());
+      novel = await res.json();
+    }
+
+    // 저장(로컬 임시)
+    function saveLocal() {
+      localStorage.setItem(`novel-${novel.id}`, JSON.stringify(novel));
+      alert('로컬에 임시 저장되었습니다. JSON을 수동 커밋하세요.');
+    }
+
+    document.getElementById('chapter-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const title   = document.getElementById('new-title').value.trim();
+      const content = document.getElementById('new-content').value.trim();
+      if (!title || !content) return;
+
+      novel.chapters.push({
+        id: novel.chapters.length + 1,
+        title,
+        content,
+        publishedDate: new Date().toISOString().slice(0,10)
+      });
+
+      saveLocal();
+      e.target.reset();
+    });
+
+    loadNovel();
+  </script>
 </body>
 </html>
