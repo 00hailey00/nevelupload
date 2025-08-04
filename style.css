@@ -47,89 +47,137 @@
 }
 
 /* ===============================================
-   기본 스타일 + 폰트 적용
+   기본 레이아웃 (사이드바 방식)
 =============================================== */
-body {
-  font-family: 'MaruBuri', 'Malgun Gothic',sans-serif;
-  line-height: 1.7;
-  margin: 0;
-  font-size: 16px;
+body { 
+  margin: 0; 
+  font-family: 'MaruBuri', 'Malgun Gothic', sans-serif; 
+  background: #fff; 
   color: #333;
+  line-height: 1.7;
+  font-size: 16px;
 }
 
-/* 제목들 */
-h1 {
-  font-family: 'MaruBuriBold', 'MaruBuri', sans-serif;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #2c3e50;
-}
-
-h2 {
-  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
-  font-size: 1.5rem;
-  margin-bottom: 0.8rem;
-  color: #34495e;
-}
-
-/* 강조 텍스트 */
-strong {
-  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
-}
-
-/* 설명 텍스트 */
-small, .description {
-  font-family: 'MaruBuriLight', 'MaruBuri', sans-serif;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* 레이아웃 */
-header, main, article, section {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* 목차 버튼 */
-#toc button {
-  display: block;
-  width: 100%;
-  margin: 0.3rem 0;
-  padding: 0.8rem;
-  font-size: 1rem;
-  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-#toc button:hover {
-  background: #e9ecef;
-  border-color: #adb5bd;
-}
-
-/* 입력 요소들 */
-input[type="text"], textarea {
-  width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.8rem;
+.sidebar{
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 200px; 
+  height: 100vh;
+  background: #f9f9f9; 
+  border-right: 1px solid #e5e5e5; 
+  padding: 1.2rem 1rem;
   font-family: 'MaruBuri', sans-serif;
-  font-size: 1rem;
-  border: 1px solid #ced4da;
+}
+
+.sidebar .logo{
+  font-size: 1.4rem;
+  font-family: 'MaruBuriBold', 'MaruBuri', sans-serif;
+  margin-bottom: 2rem;
+}
+
+.sidebar ul{list-style: none; padding: 0; margin: 0;}
+
+.sidebar li{
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0;
+  cursor: pointer;
+  font-family: 'MaruBuri', sans-serif;
+}
+
+.sidebar li.divider{border-top: 1px solid #e5e5e5; margin: 0.8rem 0;}
+.sidebar li:hover{color: #007bff;}
+
+.main-wrapper{
+  margin-left: 200px;
+  padding: 2rem 3rem;
+}
+
+.topbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.topbar h1{
+  margin: 0;
+  font-size: 1.4rem;
+  font-family: 'MaruBuriBold', 'MaruBuri', sans-serif;
+}
+
+.utilities{display: flex; align-items: center; gap: 0.8rem;}
+
+.utilities input[type="search"]{
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  box-sizing: border-box;
+  width: 200px;
+  font-family: 'MaruBuri', sans-serif;
 }
 
-textarea {
-  height: 200px;
-  resize: vertical;
-  line-height: 1.5;
+.icon-btn{background: none; border: none; font-size: 1.2rem; cursor: pointer;}
+
+.category-tabs{display: flex; gap: 0.5rem; overflow-x: auto; margin-bottom: 1.8rem;}
+
+.category-tabs button{
+  padding: 0.4rem 0.9rem;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'MaruBuri', sans-serif;
 }
 
-/* 버튼들 */
+.category-tabs button.active{background: #007bff; color: #fff; border-color: #007bff;}
+
+.novel-list{display: flex; flex-direction: column; gap: 1.4rem;}
+.novel-row{display: flex; gap: 1rem; cursor: pointer;}
+.novel-row img{width: 110px; height: 150px; object-fit: cover; border-radius: 4px;}
+.novel-row .info{flex: 1;}
+
+.novel-row h3{
+  margin: 0 0 0.4rem 0;
+  font-size: 1rem;
+  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
+  color: #222;
+  line-height: 1.3;
+}
+
+.novel-row .meta{
+  margin: 0 0 0.4rem 0;
+  font-size: 0.8rem;
+  color: #888;
+  font-family: 'MaruBuriLight', 'MaruBuri', sans-serif;
+}
+
+.novel-row .desc{
+  margin: 0 0 0.6rem 0;
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.4;
+  max-height: 38px;
+  overflow: hidden;
+  font-family: 'MaruBuri', sans-serif;
+}
+
+.stats{
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: #777;
+  font-family: 'MaruBuriLight', 'MaruBuri', sans-serif;
+}
+
+.stats i{margin-right: 0.25rem;}
+
+/* ===============================================
+   버튼 스타일
+=============================================== */
 button {
   font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
   padding: 0.6rem 1.2rem;
@@ -150,197 +198,9 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* 네비게이션 버튼 */
-.nav-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-  gap: 1rem;
-}
-
-.nav-buttons button {
-  flex: 1;
-  max-width: 150px;
-}
-
-/* 회차 내용 */
-#chapter-content {
-  font-family: 'MaruBuri', sans-serif;
-  line-height: 1.8;
-  font-size: 1.1rem;
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: #fafafa;
-  border-radius: 8px;
-}
-
-/* 폼 스타일링 */
-#editor {
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin-top: 2rem;
-}
-
-#editor h2 {
-  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
-  margin-top: 0;
-}
-
-/* 모바일 대응 */
-@media (max-width: 768px) {
-  body {
-    font-size: 14px;
-  }
-  
-  header, main, article, section {
-    padding: 0.8rem;
-  }
-  
-  .nav-buttons {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .nav-buttons button {
-    max-width: none;
-  }
-  
-  h1 {
-    font-size: 1.6rem;
-  }
-  
-  h2 {
-    font-size: 1.3rem;
-  }
-}
-
-/* 히든 상태 */
-[hidden] {
-  display: none !important;  /* !important; 로 완성 */
-}
-
-/* 소설 목록 그리드 */
-#novels-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-/* 소설 카드 */
-.novel-card {
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.novel-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  border-color: #007bff;
-}
-
-.novel-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-}
-
-.novel-card h3 {
-  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
-}
-
-.novel-card p {
-  font-family: 'MaruBuri', sans-serif;
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
-}
-
-.chapter-count {
-  font-family: 'MaruBuriLight', 'MaruBuri', sans-serif;
-  font-size: 0.8rem;
-  color: #007bff;
-  background: #e7f3ff;
-  padding: 0.2rem 0.5rem;
-  border-radius: 12px;
-}
-
-/* 소설 상세 페이지 */
-#novel-info {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-}
-
-#novel-cover {
-  width: 200px;
-  height: 280px;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-#novel-info div {
-  flex: 1;
-}
-
-#novel-info h1 {
-  font-family: 'MaruBuriBold', 'MaruBuri', sans-serif;
-  margin-bottom: 1rem;
-}
-
-#novel-info p {
-  font-family: 'MaruBuri', sans-serif;
-  margin-bottom: 0.8rem;
-}
-
-/* 회차 목록 */
-.chapter-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: 'MaruBuri', sans-serif;
-}
-
-.chapter-item:hover {
-  background: #f8f9fa;
-  padding-left: 1.5rem;
-}
-
-.chapter-item:last-child {
-  border-bottom: none;
-}
-
-.chapter-item span:first-child {
-  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
-  color: #2c3e50;
-}
-
-.chapter-item span:last-child {
-  font-family: 'MaruBuriLight', 'MaruBuri', sans-serif;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* 뒤로가기 버튼 */
+/* ===============================================
+   기타 요소들 (리더 페이지용)
+=============================================== */
 .back-button {
   background: #6c757d;
   margin-bottom: 1rem;
@@ -350,33 +210,36 @@ button:disabled {
   background: #5a6268;
 }
 
-/* 모바일 대응 (소설 카드) */
-@media (max-width: 768px) {
-  #novels-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-  
-  #novel-info {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  #novel-cover {
-    width: 150px;
-    height: 210px;
-    align-self: center;
-  }
-  
-  .novel-card {
-    padding: 1rem;
-  }
-  
-  .chapter-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
-  }
+input[type="text"], textarea {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.8rem;
+  font-family: 'MaruBuri', sans-serif;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
+textarea {
+  height: 200px;
+  resize: vertical;
+  line-height: 1.5;
+}
 
+[hidden] {
+  display: none !important;
+}
+
+/* ===============================================
+   모바일 대응
+=============================================== */
+@media (max-width: 768px){
+  .sidebar{display: none;}
+  .main-wrapper{margin: 0; padding: 1.2rem;}
+  .utilities input[type="search"]{width: 120px;}
+  
+  body {
+    font-size: 14px;
+  }
+}
