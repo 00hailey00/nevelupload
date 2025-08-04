@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>내 웹소설</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>웹소설 플랫폼</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1 id="novel-title">웹소설 제목</h1>
-    <p id="novel-desc">소개 문구가 들어갑니다.</p>
+    <h1>연재 작품</h1>
+    <p>보고 싶은 소설을 선택하세요</p>
   </header>
 
-  <!-- 목차 -->
-  <main id="toc"></main>
+  <main id="novel-list">
+    <!-- 자바스크립트가 소설 카드 삽입 -->
+  </main>
 
-  <!-- 회차 읽기 영역 (동적으로 삽입) -->
-  <article id="chapter-view" hidden>
-    <h2 id="chapter-title"></h2>
-    <div id="chapter-content"></div>
-    <nav class="nav-buttons">
-      <button id="prev-btn">이전화</button>
-      <button id="toc-btn">목차</button>
-      <button id="next-btn">다음화</button>
-    </nav>
-  </article>
+  <!-- 관리자 링크 -->
+  <footer style="text-align:center;margin:3rem 0;">
+    <a href="editor.html" style="font-size:0.85rem;color:#666;">관리자 페이지</a>
+  </footer>
 
-  <!-- 회차 추가 폼 -->
-  <section id="editor">
-    <h2>새 회차 작성</h2>
-    <form id="chapter-form">
-      <input type="text" id="new-title" placeholder="회차 제목" required />
-      <textarea id="new-content" placeholder="회차 내용" required></textarea>
-      <button type="submit">저장</button>
-    </form>
-  </section>
+  <script>
+    // 예시용 JSON - 실제로는 data/novels.json 불러오기
+    const novels = [
+      {
+        id: "novel1",
+        title: "내 첫 번째 웹소설",
+        author: "필명",
+        description: "판타지 모험이 시작된다!",
+        cover: "https://via.placeholder.com/250x200?text=소설+표지",
+        chapterCount: 5
+      }
+    ];
 
-  <script src="script.js"></script>
-</body>
-</html>
+    function renderList() {
+      const listEl
