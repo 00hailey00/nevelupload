@@ -2,19 +2,110 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>소설 보기</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script defer src="js/main.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="novel-content">
-    <h2 id="chapter-title">제목</h2>
-    <div id="chapter-content">내용</div>
-    <div class="nav">
-      <a href="#" id="prev-link">← 이전 화</a> |
-      <a href="index.html">목차</a> |
-      <a href="#" id="next-link">다음 화 →</a>
-    </div>
-  </div>
+  <header>
+    <button class="back-button" onclick="history.back()">← 작품 목록</button>
+  </header>
+
+  <main>
+    <!-- 소설 정보 -->
+    <section id="novel-info" hidden>
+      <img id="novel-cover" alt="표지">
+      <div>
+        <h1 id="novel-title"></h1>
+        <p id="novel-author"></p>
+        <p id="novel-desc"></p>
+      </div>
+    </section>
+
+    <!-- 목차 -->
+    <section id="chapter-list" hidden>
+      <h2>목차</h2>
+      <div id="chapters"></div>
+    </section>
+
+    <!-- 회차 읽기 -->
+    <article id="chapter-view" hidden>
+      <h2 id="chapter-title"></h2>
+      <div id="chapter-content"></div>
+      <nav class="nav-buttons">
+        <button id="prev-btn">이전화</button>
+        <button id="toc-btn">목차</button>
+        <button id="next-btn">다음화</button>
+      </nav>
+    </article>
+  </main>
+
+  <script>
+    // URL 파라미터
+    const params = new URLSearchParams(location.search);
+    const novelId  = params.get('id');
+    let chapterIdx = parseInt(params.get('ch') || '0', 10);
+
+    let novel = {};
+
+    async function init() {
+      const res = await fetch(`./data/novels/${novelId}.json`);
+      novel = await res.json();
+
+      document.getElementById('novel-title').textContent = novel.title;
+      document.getElementById('novel-author').textContent = novel.author;
+      document.getElementById('novel-desc').textContent = novel.description;
+      document.getElementById('novel-cover').src = novel.cover || './images/default-cover.jpg';
+
+      document.getElementById('novel-info').hidden = false;
+
+      renderTOC();
+      if (!isNaN(chapterIdx)) showChapter(chapterIdx);
+    }
+
+    // 목차 출력
+    function renderTOC() {
+      const list = document.getElementById('chapters');
+      list.innerHTML = novel.chapters.map((ch, i) => `
+        <div class="chapter-item" onclick="showChapter(${i})">
+          <span>${i + 1}화. ${ch.title}</span>
+          <span>${ch.publishedDate}</span>
+        </div>
+      `).join('');
+      document.getElementById('chapter-list').hidden = false;
+    }
+
+    // 회차 표시
+    function showChapter(i) {
+      chapterIdx = i;
+      const ch = novel.chapters[i];
+      document.getElementById('chapter-title').textContent =
+        `${i + 1}화. ${ch.title}`;
+      document.getElementById('chapter-content').innerHTML =
+        ch.content.replace(/\n/g, '<br>');
+      document.getElementById('chapter-view').hidden   = false;
+      document.getElementById('chapter-list').hidden  = true;
+      updateNav();
+    }
+
+    // 네비게이션
+    function updateNav() {
+      prev.disabled = chapterIdx === 0;
+      next.disabled = chapterIdx === novel.chapters.length - 1;
+    }
+
+    const prev = document.getElementById('prev-btn');
+    const next = document.getElementById('next-btn');
+    const toc  = document.getElementById('toc-btn');
+
+    prev.onclick = () => showChapter(chapterIdx - 1);
+    next.onclick = () => showChapter(chapterIdx + 1);
+    toc.onclick  = () => {
+      document.getElementById('chapter-view').hidden  = true;
+      document.getElementById('chapter-list').hidden = false;
+    };
+
+    init();
+  </script>
 </body>
 </html>
