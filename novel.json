@@ -1,0 +1,16 @@
+{
+  "novel": {
+    "title": "소설 제목",
+    "author": "작가명",
+    "description": "소설 설명",
+    "chapters": [
+      {
+        "id": 1,
+        "title": "첫 번째 회차",
+        "content": "회차 내용...",
+        "publishedDate": "2025-08-05",
+        "wordCount": 1500
+      }
+    ]
+  }
+}
