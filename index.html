@@ -12,27 +12,35 @@
     <p>보고 싶은 소설을 선택하세요</p>
   </header>
 
-  <main id="novel-list">
-    <!-- 자바스크립트가 소설 카드 삽입 -->
-  </main>
+  <main id="novel-list"></main>
 
-  <!-- 관리자 링크 -->
   <footer style="text-align:center;margin:3rem 0;">
     <a href="editor.html" style="font-size:0.85rem;color:#666;">관리자 페이지</a>
   </footer>
 
   <script>
-    // 예시용 JSON - 실제로는 data/novels.json 불러오기
-    const novels = [
-      {
-        id: "novel1",
-        title: "내 첫 번째 웹소설",
-        author: "필명",
-        description: "판타지 모험이 시작된다!",
-        cover: "https://via.placeholder.com/250x200?text=소설+표지",
-        chapterCount: 5
-      }
-    ];
+    // ➊ 전체 작품 목록을 불러온다
+    async function loadNovels() {
+      const res = await fetch('./data/novels.json');
+      const { novels } = await res.json();
+      renderNovels(novels);
+    }
 
-    function renderList() {
-      const listEl
+    // ➋ 카드 형태로 출력
+    function renderNovels(novels) {
+      const list = document.getElementById('novel-list');
+      list.innerHTML = novels.map(nv => `
+        <div class="novel-card" onclick="location.href='reader.html?id=${nv.id}'">
+          <img src="${nv.cover || './images/default-cover.jpg'}" alt="표지">
+          <h3>${nv.title}</h3>
+          <p>${nv.author}</p>
+          <p>${nv.description}</p>
+          <span class="chapter-count">${nv.chapterCount}화</span>
+        </div>
+      `).join('');
+    }
+
+    loadNovels();
+  </script>
+</body>
+</html>
