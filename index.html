@@ -1,46 +1,103 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>웹소설 플랫폼</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- 아이콘용 → 필요 없으면 삭제 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>연재 작품</h1>
-    <p>보고 싶은 소설을 선택하세요</p>
-  </header>
+  <!-- ① 왼쪽 사이드 메뉴 -->
+  <aside class="sidebar">
+    <div class="logo">배가</div>
+    <nav>
+      <ul>
+        <li><i class="fa-solid fa-fire"></i> 최신작품</li>
+        <li><i class="fa-solid fa-crown"></i> 베스트</li>
+        <li><i class="fa-solid fa-bookmark"></i> 보관함</li>
+        <li class="divider"></li>
+        <li><i class="fa-solid fa-pen"></i> 작품 관리</li>
+      </ul>
+    </nav>
+  </aside>
 
-  <main id="novel-list"></main>
+  <!-- ② 우측 메인 영역 -->
+  <div class="main-wrapper">
 
-  <footer style="text-align:center;margin:3rem 0;">
-    <a href="editor.html" style="font-size:0.85rem;color:#666;">관리자 페이지</a>
-  </footer>
+    <!-- 상단 바(검색·햄버거) -->
+    <header class="topbar">
+      <h1>최신 작품</h1>
+      <div class="utilities">
+        <input type="search" placeholder="작품·키워드 검색">
+        <button class="icon-btn"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </header>
+
+    <!-- 카테고리 탭 -->
+    <div class="category-tabs">
+      <button class="active">전체</button>
+      <button>77페스티벌</button>
+      <button>노블성인</button>
+      <button>노블레스</button>
+      <button>프리미엄</button>
+      <button>단행본</button>
+      <button>BORN</button>
+      <button>무료</button>
+      <button>완결</button>
+    </div>
+
+    <!-- 작품 리스트 -->
+    <main id="novel-list" class="novel-list"></main>
+  </div>
 
   <script>
-    // ➊ 전체 작품 목록을 불러온다
-    async function loadNovels() {
-      const res = await fetch('./data/novels.json');
-      const { novels } = await res.json();
-      renderNovels(novels);
+  // 데모용 가짜 데이터 -----------------------------
+  const novels = [
+    {
+      id: "nov1",
+      title: "[회피스] 예 저는 이 게임을 처음 합니다만..",
+      author: "탑시플릿",
+      desc: "게임 처럼 작가삽입 이상한/태만함/칼군/?? RPG-코믹",
+      cover: "https://via.placeholder.com/110x150?text=표지",
+      tags: ["게임이식", "RPG"],
+      chapters: 3,
+      views: 82,
+      likes: 4
+    },
+    {
+      id: "nov2",
+      title: "[메웃죽] 강조되고 반복되는 최근 아이돌을 잘... ",
+      author: "듀아예",
+      desc: "X자인데, 여기 외에는 볼 길이 없다.",
+      cover: "https://via.placeholder.com/110x150?text=표지",
+      tags: ["메웃죽", "개그물"],
+      chapters: 3,
+      views: 77,
+      likes: 3
     }
+  ];
+  // ----------------------------------------------
 
-    // ➋ 카드 형태로 출력
-    function renderNovels(novels) {
-      const list = document.getElementById('novel-list');
-      list.innerHTML = novels.map(nv => `
-        <div class="novel-card" onclick="location.href='reader.html?id=${nv.id}'">
-          <img src="${nv.cover || './images/default-cover.jpg'}" alt="표지">
+  function renderList() {
+    const wrap = document.getElementById('novel-list');
+    wrap.innerHTML = novels.map(nv => `
+      <article class="novel-row" onclick="location.href='reader.html?id=${nv.id}'">
+        <img src="${nv.cover}" alt="표지">
+        <div class="info">
           <h3>${nv.title}</h3>
-          <p>${nv.author}</p>
-          <p>${nv.description}</p>
-          <span class="chapter-count">${nv.chapterCount}화</span>
+          <p class="meta">${nv.author} · 무료 연재 · ${nv.chapters}화</p>
+          <p class="desc">${nv.desc}</p>
+          <div class="stats">
+            <span><i class="fa-regular fa-eye"></i> ${nv.views}</span>
+            <span><i class="fa-regular fa-heart"></i> ${nv.likes}</span>
+          </div>
         </div>
-      `).join('');
-    }
-
-    loadNovels();
+      </article>
+    `).join('');
+  }
+  renderList();
   </script>
 </body>
 </html>
