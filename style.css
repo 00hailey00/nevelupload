@@ -169,66 +169,50 @@ body {
    작품 리스트
 =============================================== */
 .novel-list{
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem 3rem;
-  padding: 2rem 1rem;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  grid-auto-rows:1fr;            /* 모든 행 높이를 동일하게 */
+  gap:2rem 3rem;
+  padding:2rem 1rem;
 }
 
 .novel-row{
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.novel-row:hover{
-  transform: translateY(-2px);
+  display:flex;
+  flex-direction:column;
+  cursor:pointer;
+  transition:transform .2s ease;
+  height:100%;                   /* 그리드 셀 전체 높이 사용 */
 }
 
 .novel-row img{
-  width: 100%;
-  height: 210px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 1rem;
+  width:100%;
+  height:200px;                  /* 표지 높이 고정 */
+  object-fit:cover;
+  border-radius:4px;
+  margin-bottom:1rem;
 }
 
 .novel-row .info{
-  flex: 1;
-}
-
-.novel-row h3{
-  margin: 0 0 0.4rem 0;
-  font-size: 1rem;
-  font-family: 'MaruBuriSemiBold', 'MaruBuri', sans-serif;
-  color: #222;
-  line-height: 1.3;
-}
-
-.novel-row .meta{
-  margin: 0 0 0.4rem 0;
-  font-size: 0.8rem;
-  color: #888;
-  font-family: 'MaruBuriLight', 'MaruBuri', sans-serif;
+  flex:1;
+  display:flex;
+  flex-direction:column;
 }
 
 .novel-row .desc{
-  margin: 0 0 0.6rem 0;
-  font-size: 0.85rem;
-  color: #555;
-  line-height: 1.4;
-  max-height: 38px;
-  overflow: hidden;
-  font-family: 'MaruBuri', sans-serif;
+  margin:0 0 .6rem 0;
+  font-size:.85rem;
+  color:#555;
+  line-height:1.4;
+  height:3.2em;                  /* 2줄 제한 */
+  overflow:hidden;
 }
 
 .stats{
-  display: flex;
-  gap: 1rem;
-  font-size: 0.8rem;
-  color: #777;
-  font-family: 'MaruBuriLight', 'MaruBuri', sans-serif;
+  margin-top:auto;               /* 카드 하단 고정 */
+  display:flex;
+  gap:1rem;
+  font-size:.8rem;
+  color:#777;
 }
 
 .stats i{margin-right: 0.25rem;}
@@ -275,32 +259,23 @@ textarea {
 /* ===============================================
    모바일 대응
 =============================================== */
-@media (max-width: 768px){
-  .sidebar{display: none;}
-  .main-wrapper{margin: 0; padding: 0 0.5rem 1rem;}
-  
-  .sub-title{font-size: 16px;}
-  .category-tabs{padding: 10px 12px 8px;}
-  .category-tabs button{padding: 6px 14px; font-size: 13px;}
-  
+@media (max-width:768px){
   .novel-list{
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1rem 0.5rem;
+    grid-template-columns:1fr;
+    gap:1.5rem;
+    padding:1rem .5rem;
   }
-  
   .novel-row{
-    flex-direction: row;
-    gap: 1rem;
+    flex-direction:row;
+    gap:1rem;
   }
-  
   .novel-row img{
-    width: 110px;
-    height: 150px;
-    margin-bottom: 0;
+    width:110px;
+    height:150px;
+    margin-bottom:0;
   }
-  
-  body {
-    font-size: 14px;
+
+  body{
+    font-size:14px;   /* ← media-query 안으로 이동 */
   }
-}
+}                     /* ← 이것만 남기고 더 이상 닫는 괄호 없음 */
