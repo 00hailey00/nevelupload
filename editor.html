@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>회차 작성</title>
+  <title>새 회차 작성</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    #spinner{display:none;text-align:center;margin-top:1rem;}
+  </style>
 </head>
 <body>
   <header>
@@ -12,55 +15,113 @@
     <h1>새 회차 작성</h1>
   </header>
 
-  <!-- 회차 추가 폼 -->
   <section id="editor">
     <form id="chapter-form">
-      <input type="text" id="new-title" placeholder="회차 제목" required>
-      <textarea id="new-content" placeholder="회차 내용" required></textarea>
-      <button type="submit">저장</button>
+      <input id="title" type="text" placeholder="회차 제목" required>
+      <textarea id="content" placeholder="회차 내용" required></textarea>
+      <button id="save-btn" type="submit">저장</button>
     </form>
-    <p style="font-size:0.85rem;color:#666;margin-top:1rem;">
-      ※ GitHub Pages는 서버가 없기 때문에 <strong>로컬 저장</strong> 후 JSON을 직접 커밋해야 합니다.<br>
-      추후 GitHub API 자동 커밋으로 확장하세요.
+    <div id="spinner">저장 중… ⏳</div>
+    <p class="desc" style="font-size:.85rem;color:#666;margin-top:1rem;">
+      ※ 본 예시는 토큰이 브라우저에 노출됩니다.<br>
+      실제 서비스는 Netlify&nbsp;Functions·Workers 등 서버리스로 토큰을 숨기세요.
     </p>
   </section>
 
+  <script src="config.js"></script>
   <script>
-    // 대상 novel JSON 파일 (수정)
-    const NOVEL_JSON = './data/novels/novel1.json';
+/* ============================================
+   0. 유틸
+============================================ */
+const qs       = new URLSearchParams(location.search);
+const novelId  = qs.get('id') || 'novel1';
+const filePath = `data/novels/${novelId}.json`;
+const apiURL   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${filePath}`;
 
-    let novel = {};
+const toB64   = s => btoa(unescape(encodeURIComponent(s)));
+const fromB64 = s => decodeURIComponent(escape(atob(s)));
 
-    // 로드
-    async function loadNovel() {
-      const res = await fetch(NOVEL_JSON + '?t=' + Date.now());
-      novel = await res.json();
+/* 재시도 헬퍼 (기본 2회 재시도) */
+async function fetchWithRetry(url, opt={}, retry=2){
+  try{
+    const r = await fetch(url, opt);
+    if(!r.ok) throw new Error(r.status);
+    return r;
+  }catch(e){
+    if(!retry) throw e;
+    await new Promise(res=>setTimeout(res,1000));
+    return fetchWithRetry(url,opt,retry-1);
+  }
+}
+
+/* ============================================
+   1. 회차 추가
+============================================ */
+async function addChapter(title, text){
+  /* (1) 원본+sha 읽기 */
+  const res = await fetchWithRetry(apiURL,{
+    headers:{
+      Authorization:`Bearer ${GH_TOKEN}`,
+      Accept:'application/vnd.github.v3+json'
     }
+  });
+  const {content, sha} = await res.json();
+  const json = JSON.parse(fromB64(content));
 
-    // 저장(로컬 임시)
-    function saveLocal() {
-      localStorage.setItem(`novel-${novel.id}`, JSON.stringify(novel));
-      alert('로컬에 임시 저장되었습니다. JSON을 수동 커밋하세요.');
-    }
+  /* (2) 새 ID = 현재 최대 + 1 */
+  const maxId = json.chapters.reduce((m,c)=>Math.max(m,Number(c.id)),0);
+  json.chapters.push({
+    id: (maxId+1).toString(),
+    title,
+    content: text,
+    publishedDate: new Date().toISOString().slice(0,10)
+  });
 
-    document.getElementById('chapter-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const title   = document.getElementById('new-title').value.trim();
-      const content = document.getElementById('new-content').value.trim();
-      if (!title || !content) return;
+  /* (3) 번호순 정렬 */
+  json.chapters.sort((a,b)=>Number(a.id)-Number(b.id));
 
-      novel.chapters.push({
-        id: novel.chapters.length + 1,
-        title,
-        content,
-        publishedDate: new Date().toISOString().slice(0,10)
-      });
+  /* (4) PUT 커밋 */
+  await fetchWithRetry(apiURL,{
+    method:'PUT',
+    headers:{
+      Authorization:`Bearer ${GH_TOKEN}`,
+      Accept:'application/vnd.github.v3+json',
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+      message:`회차 추가: ${title}`,
+      content:toB64(JSON.stringify(json,null,2)),
+      branch:GH_BRANCH,
+      sha
+    })
+  });
+}
 
-      saveLocal();
-      e.target.reset();
-    });
+/* ============================================
+   2. 폼 이벤트
+============================================ */
+const form  = document.getElementById('chapter-form');
+const btn   = document.getElementById('save-btn');
+const spin  = document.getElementById('spinner');
 
-    loadNovel();
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const title = document.getElementById('title').value.trim();
+  const text  = document.getElementById('content').value.trim();
+  if(!title||!text) return alert('제목·내용을 입력하세요.');
+
+  btn.disabled = true; spin.style.display='block';
+
+  try{
+    await addChapter(title,text);
+    alert('GitHub 저장 완료!');
+    location.href = `reader.html?id=${novelId}`;
+  }catch(err){
+    alert(`저장 실패: ${err.message}`);
+  }finally{
+    btn.disabled = false; spin.style.display='none';
+  }
+});
   </script>
 </body>
 </html>
