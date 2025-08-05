@@ -171,22 +171,22 @@ body {
 .novel-list{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  grid-auto-rows:1fr;            /* 모든 행 높이를 동일하게 */
+  grid-auto-rows:320px;      /* ← 데스크톱에서 높이 고정 */
   gap:2rem 3rem;
   padding:2rem 1rem;
 }
 
 .novel-row{
+  height:100%;
   display:flex;
   flex-direction:column;
   cursor:pointer;
   transition:transform .2s ease;
-  height:100%;                   /* 그리드 셀 전체 높이 사용 */
 }
 
 .novel-row img{
   width:100%;
-  height:200px;                  /* 표지 높이 고정 */
+  height:200px;
   object-fit:cover;
   border-radius:4px;
   margin-bottom:1rem;
@@ -203,17 +203,18 @@ body {
   font-size:.85rem;
   color:#555;
   line-height:1.4;
-  height:3.2em;                  /* 2줄 제한 */
+  height:3.2em;
   overflow:hidden;
 }
 
 .stats{
-  margin-top:auto;               /* 카드 하단 고정 */
+  margin-top:auto;
   display:flex;
   gap:1rem;
   font-size:.8rem;
   color:#777;
 }
+
 
 .stats i{margin-right: 0.25rem;}
 
@@ -261,14 +262,16 @@ textarea {
 =============================================== */
 @media (max-width:768px){
   .novel-list{
-    grid-template-columns:1fr;
+    grid-template-columns:1fr;  /* 1열로 변경 */
     gap:1.5rem;
     padding:1rem .5rem;
   }
+  
   .novel-row{
-    flex-direction:row;
+    flex-direction:row;         /* 가로 배치 */
     gap:1rem;
   }
+  
   .novel-row img{
     width:110px;
     height:150px;
@@ -276,6 +279,6 @@ textarea {
   }
 
   body{
-    font-size:14px;   /* ← media-query 안으로 이동 */
+    font-size:14px;
   }
-}                     /* ← 이것만 남기고 더 이상 닫는 괄호 없음 */
+}
