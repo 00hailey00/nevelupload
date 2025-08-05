@@ -7,6 +7,7 @@
   <!-- 아이콘용 → 필요 없으면 삭제 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <!-- ① 왼쪽 사이드 메뉴 -->
@@ -27,13 +28,29 @@
   <div class="main-wrapper">
 
     <!-- 상단 바(검색·햄버거) -->
-    <header class="topbar">
-      <h1 class="sub-title">최신 작품</h1>
-      <div class="utilities">
-        <input type="search" placeholder="작품·키워드 검색">
-        <button class="icon-btn"><i class="fa-solid fa-bars"></i></button>
-      </div>
-    </header>
+<!-- 기존 <header class="topbar">…</header> 블록을 전부 삭제하고 -->
+<header class="topbar">
+  <!-- 왼쪽 아이콘 -->
+  <button class="icon-btn home-btn"><i class="fa-solid fa-house"></i></button>
+
+  <!-- 중앙 제목 -->
+  <h2 class="sub-title">최신 작품</h2>
+
+  <!-- 오른쪽 아이콘 그룹 -->
+  <div class="right-icons">
+    <button class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <button class="icon-btn"><i class="fa-solid fa-bars"></i></button>
+  </div>
+</header>
+
+<!-- 카테고리 탭 (제목 바로 아래) -->
+<nav class="category-tabs">
+  <button class="active">전체</button>
+  <button>무료</button>
+  <button>완결</button>
+  <button class="arrow-btn"><i class="fa-solid fa-chevron-right"></i></button>
+</nav>
+
 
     <!-- 카테고리 탭 -->
     <div class="category-tabs">
